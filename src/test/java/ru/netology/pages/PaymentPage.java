@@ -16,7 +16,7 @@ public class PaymentPage {
     private final SelenideElement cardField = $("[placeholder='0000 0000 0000 0000']");
     private final SelenideElement monthField = $("[placeholder='08']");
     private final SelenideElement yearField = $("[placeholder='22']");
-    private final SelenideElement cardholderField = $$("[class='input__box']").get(3);
+    private final SelenideElement cardholderField = $$("[class='input__control']").get(3);
     private final SelenideElement codeField = $("[placeholder='999']");
 
     private final SelenideElement sendAnApplicationButton = $(byText("Продолжить"));
@@ -28,7 +28,8 @@ public class PaymentPage {
     private final SelenideElement emptyFieldError = $(byText("Поле обязательно для заполнения"));
     private final SelenideElement wrongMonthError = $(byText("Неверно указан срок действия карты"));
     private final SelenideElement wrongYearError = $(byText("Истёк срок действия карты"));
-    private final SelenideElement wrongSymbolsInCardholder = $(byText("Цифры и специальные символы недопустимы"));
+    private final SelenideElement onlyLettersError = $(byText("Допустимы только символы латиницы"));
+    private final SelenideElement onlyNumbersError = $(byText("Допустимы только цифры"));
 
     public PaymentPage clearForm() {
         clearAllFields();
@@ -53,11 +54,11 @@ public class PaymentPage {
     }
 
     public void getSuccessMessage() {
-        successMessage.shouldBe(visible, Duration.ofSeconds(10)).shouldHave(Condition.text("Успешно"));
+        successMessage.shouldBe(visible, Duration.ofSeconds(15)).shouldHave(Condition.text("Успешно"));
     }
 
     public void getRejectedMessage() {
-        rejectedMessage.shouldBe(visible, Duration.ofSeconds(10)).shouldHave(Condition.text("Ошибка"));
+        rejectedMessage.shouldBe(visible, Duration.ofSeconds(15)).shouldHave(Condition.text("Ошибка"));
     }
 
     public void getWrongFormatError() {
@@ -76,7 +77,11 @@ public class PaymentPage {
         wrongYearError.shouldBe(visible);
     }
 
-    public void getWrongSymbolsInCardholder() {
-        wrongSymbolsInCardholder.shouldBe(visible);
+    public void getOnlyLettersError() {
+        onlyLettersError.shouldBe(visible);
+    }
+
+    public void getOnlyNumbersError() {
+        onlyNumbersError.shouldBe(visible);
     }
 }

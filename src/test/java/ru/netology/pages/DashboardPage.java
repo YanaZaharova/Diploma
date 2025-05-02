@@ -19,13 +19,15 @@ public class DashboardPage {
         heading.shouldBe(visible);
     }
 
-    public void chooseCardPayment() {
+    public PaymentPage chooseCardPayment() {
         cardPaymentButton.shouldHave(exactText("Купить")).click();
         cardPaymentHeading.shouldBe(visible);
+        return new PaymentPage();
     }
 
-    public void chooseCreditPayment() {
+    public PaymentPage chooseCreditPayment() {
         creditPaymentButton.shouldHave(exactText("Купить в кредит")).click();
         creditPaymentHeading.shouldBe(visible);
+        return new PaymentPage();
     }
 }

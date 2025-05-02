@@ -25,28 +25,24 @@ public class DataHelper {
         return "APPROVED";
     }
 
-    public static String getSecondCardStatus() {
+    public static String getDeclinedCardStatus() {
         return "DECLINED";
     }
 
-    public static int getValidMonth() {
-        return LocalDate.now().getMonthValue();
-    }
-
-    public static String getValidYear() {
-        return LocalDate.now().plusYears(9).format(DateTimeFormatter.ofPattern("yy"));
+    public static String getValidMonth() {
+        return LocalDate.now().format(DateTimeFormatter.ofPattern("MM"));
     }
 
     public static String getValidOwner() {
         return engFaker.name().firstName() + " " + engFaker.name().lastName();
     }
 
-    public static String getValidCode() {
-        return rusFaker.number().digits(3);
+    public static String getValidYear() {
+        return LocalDate.now().plusYears(3).format(DateTimeFormatter.ofPattern("yy"));
     }
 
-    public static String getEmptyCardNumber() {
-        return "";
+    public static String getValidCode() {
+        return rusFaker.number().digits(3);
     }
 
     public static String getOneSymbolCard() {
@@ -73,10 +69,6 @@ public class DataHelper {
         return "00";
     }
 
-    public static String getEmptyMonth() {
-        return "";
-    }
-
     public static String getOneSymbolInYear() {
         return rusFaker.number().digits(1);
     }
@@ -97,10 +89,6 @@ public class DataHelper {
         return LocalDate.now().minusYears(1).format(DateTimeFormatter.ofPattern("yy"));
     }
 
-    public static String getEmptyYear() {
-        return "";
-    }
-
     public static String getCyrillicSymbolsInOwner() {
         return rusFaker.name().firstName() + " " + rusFaker.name().lastName();
     }
@@ -109,11 +97,11 @@ public class DataHelper {
         return rusFaker.number().randomDigit();
     }
 
-    public static String getDiacriticsInOwner() {
+    public static String getDiacriticsInField() {
         return "$*@#&^";
     }
 
-    public static String getSpacesInOwner() {
+    public static String getSpacesInField() {
         return "         ";
     }
 
@@ -121,7 +109,7 @@ public class DataHelper {
         return rusFaker.number().digits(2);
     }
 
-    public static String getEmptyCode() {
+    public static String getEmptyField() {
         return "";
     }
 }
