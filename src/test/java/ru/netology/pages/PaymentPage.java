@@ -28,8 +28,6 @@ public class PaymentPage {
     private final SelenideElement emptyFieldError = $(byText("Поле обязательно для заполнения"));
     private final SelenideElement wrongMonthError = $(byText("Неверно указан срок действия карты"));
     private final SelenideElement wrongYearError = $(byText("Истёк срок действия карты"));
-    private final SelenideElement onlyLettersError = $(byText("Допустимы только символы латиницы"));
-    private final SelenideElement onlyNumbersError = $(byText("Допустимы только цифры"));
 
     public PaymentPage clearForm() {
         clearAllFields();
@@ -77,11 +75,4 @@ public class PaymentPage {
         wrongYearError.shouldBe(visible);
     }
 
-    public void getOnlyLettersError() {
-        onlyLettersError.shouldBe(visible);
-    }
-
-    public void getOnlyNumbersError() {
-        onlyNumbersError.shouldBe(visible);
-    }
 }

@@ -54,7 +54,7 @@ public class PaymentGateTest {
     }
 
     @Test
-    @DisplayName("Отправка формы с текущим годом в поле 'Год'")
+    @DisplayName("Отправка формы с текущим годом и текущим месяцем")
     void successfulPurchaseWithPresentYear() {
         cardPayment = dashboard.chooseCardPayment();
         cardPayment.clearForm();
@@ -71,7 +71,7 @@ public class PaymentGateTest {
     }
 
     @Test
-    @DisplayName("Отправка формы с максимально далеким годом в поле 'Год'")
+    @DisplayName("Отправка формы с максимально далеким годом и текущим месяцем")
     void successfulPurchaseWithMaxYear() {
         cardPayment = dashboard.chooseCardPayment();
         cardPayment.clearForm();
@@ -131,50 +131,443 @@ public class PaymentGateTest {
         cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
         cardPayment.getEmptyFieldError();
     }
+
+    @Test
+    @DisplayName("Отправка формы с номером карты из 15-ти символов")
+    void declinePurchaseWith15SymbolsCard() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.get15SymbolCard();
+        var month = DataHelper.getValidMonth();
+        var year = DataHelper.getValidYear();
+        var cardholder = DataHelper.getValidOwner();
+        var code = DataHelper.getValidCode();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getWrongFormatError();
+    }
+
+    @Test
+    @DisplayName("Отправка формы с номером карты из 1-го символа")
+    void declinePurchaseWithOneSymbolCard() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getOneSymbolCard();
+        var month = DataHelper.getValidMonth();
+        var year = DataHelper.getValidYear();
+        var cardholder = DataHelper.getValidOwner();
+        var code = DataHelper.getValidCode();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getWrongFormatError();
+    }
+
+    @Test
+    @DisplayName("Отправка формы с пустым полем для номера карты")
+    void declinePurchaseWithEmptyCard() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getEmptyField();
+        var month = DataHelper.getValidMonth();
+        var year = DataHelper.getValidYear();
+        var cardholder = DataHelper.getValidOwner();
+        var code = DataHelper.getValidCode();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getEmptyFieldError();
+    }
+
+    @Test
+    @DisplayName("Отправка формы с кириллицей в поле Номер карты")
+    void declinePurchaseWithCyrillicLettersInCard() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getRusTextInCardNumber();
+        var month = DataHelper.getValidMonth();
+        var year = DataHelper.getValidYear();
+        var cardholder = DataHelper.getValidOwner();
+        var code = DataHelper.getValidCode();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getWrongFormatError();
+    }
+
+    @Test
+    @DisplayName("Отправка формы с латиницей в поле Номер карты")
+    void declinePurchaseWithEnglishLettersInCard() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getEngTextInCardNumber();
+        var month = DataHelper.getValidMonth();
+        var year = DataHelper.getValidYear();
+        var cardholder = DataHelper.getValidOwner();
+        var code = DataHelper.getValidCode();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getWrongFormatError();
+    }
+
+    @Test
+    @DisplayName("Отправка формы со специальными символами в поле Номер карты")
+    void declinePurchaseWithDiacriticsInCard() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getDiacriticsInField();
+        var month = DataHelper.getValidMonth();
+        var year = DataHelper.getValidYear();
+        var cardholder = DataHelper.getValidOwner();
+        var code = DataHelper.getValidCode();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getWrongFormatError();
+    }
+
+    @Test
+    @DisplayName("Отправка формы с одним символом в поле “Месяц”")
+    void declinePurchaseWithOneSymbolMonth() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getFirstCardNumber();
+        var month = DataHelper.getOneSymbolInMonth();
+        var year = DataHelper.getValidYear();
+        var cardholder = DataHelper.getValidOwner();
+        var code = DataHelper.getValidCode();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getWrongFormatError();
+    }
+
+    @Test
+    @DisplayName("Отправка формы с номером выше 12-го в поле “Месяц”")
+    void declinePurchaseWithNonexistentMonth() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getFirstCardNumber();
+        var month = DataHelper.get13InMonth();
+        var year = DataHelper.getValidYear();
+        var cardholder = DataHelper.getValidOwner();
+        var code = DataHelper.getValidCode();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getWrongMonthError();
+    }
+
+    @Test
+    @DisplayName("Отправка формы с нулями в поле 'Месяц'")
+    void declinePurchaseWithZerosInMonth() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getFirstCardNumber();
+        var month = DataHelper.getZerosInMonth();
+        var year = DataHelper.getValidYear();
+        var cardholder = DataHelper.getValidOwner();
+        var code = DataHelper.getValidCode();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getWrongMonthError();
+    }
+
+    @Test
+    @DisplayName("Отправка формы с пустым полем “Месяц”")
+    void declinePurchaseWithEmptyMonth() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getFirstCardNumber();
+        var month = DataHelper.getEmptyField();
+        var year = DataHelper.getValidYear();
+        var cardholder = DataHelper.getValidOwner();
+        var code = DataHelper.getValidCode();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getEmptyFieldError();
+    }
+
+    @Test
+    @DisplayName("Отправка формы с кириллицей в поле “Месяц”")
+    void declinePurchaseWithCyrillicLettersInMonth() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getFirstCardNumber();
+        var month = DataHelper.getRusTextInMonth();
+        var year = DataHelper.getValidYear();
+        var cardholder = DataHelper.getValidOwner();
+        var code = DataHelper.getValidCode();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getWrongFormatError();
+    }
+
+    @Test
+    @DisplayName("Отправка формы с латиницей в поле “Месяц”")
+    void declinePurchaseWithEnglishLettersInMonth() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getFirstCardNumber();
+        var month = DataHelper.getEngTextInMonth();
+        var year = DataHelper.getValidYear();
+        var cardholder = DataHelper.getValidOwner();
+        var code = DataHelper.getValidCode();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getWrongFormatError();
+    }
+
+    @Test
+    @DisplayName("Отправка формы со специальными символами в поле “Месяц”")
+    void declinePurchaseWithDiacriticsInMonth() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getFirstCardNumber();
+        var month = DataHelper.getDiacriticsInField();
+        var year = DataHelper.getValidYear();
+        var cardholder = DataHelper.getValidOwner();
+        var code = DataHelper.getValidCode();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getWrongFormatError();
+    }
+
+    @Test
+    @DisplayName("Отправка формы с предыдущим месяцем и текущим годом")
+    void declinePurchaseWithPreviousMonthAndPresentYear() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getFirstCardNumber();
+        var month = DataHelper.getPreviousMonth();
+        var year = DataHelper.getPresentYear();
+        var cardholder = DataHelper.getValidOwner();
+        var code = DataHelper.getValidCode();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getWrongYearError();
+    }
+
+    @Test
+    @DisplayName("Отправка формы с предыдущим годом")
+    void declinePurchaseWithPreviousYear() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getFirstCardNumber();
+        var month = DataHelper.getValidMonth();
+        var year = DataHelper.getPreviousYear();
+        var cardholder = DataHelper.getValidOwner();
+        var code = DataHelper.getValidCode();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getWrongYearError();
+    }
+
+    @Test
+    @DisplayName("Отправка формы с одним символом в поле “Год”")
+    void declinePurchaseWithOneSymbolYear() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getFirstCardNumber();
+        var month = DataHelper.getValidMonth();
+        var year = DataHelper.getOneSymbolInYear();
+        var cardholder = DataHelper.getValidOwner();
+        var code = DataHelper.getValidCode();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getWrongFormatError();
+    }
+
+    @Test
+    @DisplayName("Отправка формы с неправдоподобно большим сроком карты(на месяц больше 10-ти лет)")
+    void declinePurchaseWithMoreThen10YearsTerm() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getFirstCardNumber();
+        var month = DataHelper.getNextMonth();
+        var year = DataHelper.getMaximumTermInYear();
+        var cardholder = DataHelper.getValidOwner();
+        var code = DataHelper.getValidCode();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getWrongMonthError();
+    }
+
+    @Test
+    @DisplayName("Отправка формы с пустым полем “Год”")
+    void declinePurchaseWithEmptyYear() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getFirstCardNumber();
+        var month = DataHelper.getValidMonth();
+        var year = DataHelper.getEmptyField();
+        var cardholder = DataHelper.getValidOwner();
+        var code = DataHelper.getValidCode();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getEmptyFieldError();
+    }
+
+    @Test
+    @DisplayName("Отправка формы с кириллицей в поле “Год”")
+    void declinePurchaseWithCyrillicLettersInYear() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getFirstCardNumber();
+        var month = DataHelper.getValidMonth();
+        var year = DataHelper.getRusTextInYear();
+        var cardholder = DataHelper.getValidOwner();
+        var code = DataHelper.getValidCode();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getWrongFormatError();
+    }
+
+    @Test
+    @DisplayName("Отправка формы с латиницей в поле “Год”")
+    void declinePurchaseWithEnglishLettersInYear() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getFirstCardNumber();
+        var month = DataHelper.getValidMonth();
+        var year = DataHelper.getEngTextInYear();
+        var cardholder = DataHelper.getValidOwner();
+        var code = DataHelper.getValidCode();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getWrongFormatError();
+    }
+
+    @Test
+    @DisplayName("Отправка формы со спец. символами в поле “Год”")
+    void declinePurchaseWithDiacriticsInYear() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getFirstCardNumber();
+        var month = DataHelper.getValidMonth();
+        var year = DataHelper.getDiacriticsInField();
+        var cardholder = DataHelper.getValidOwner();
+        var code = DataHelper.getValidCode();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getWrongFormatError();
+    }
+
+    @Test
+    @DisplayName("Ввести данные с использованием кириллицы в поле “Владелец”")
+    void declinePurchaseWithCyrillicLettersInOwner() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getFirstCardNumber();
+        var month = DataHelper.getValidMonth();
+        var year = DataHelper.getValidYear();
+        var cardholder = DataHelper.getRussianKeyboardNameInOwner();
+        var code = DataHelper.getValidCode();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getWrongFormatError();
+    }
+
+    @Test
+    @DisplayName("Ввести данные с использованием чисел в поле “Владелец”")
+    void declinePurchaseWithNumbersInOwner() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getFirstCardNumber();
+        var month = DataHelper.getValidMonth();
+        var year = DataHelper.getValidYear();
+        var cardholder = DataHelper.getNumbersInOwner();
+        var code = DataHelper.getValidCode();
+        cardPayment.enterDataAndContinue(card, month, year, String.valueOf(cardholder), code);
+        cardPayment.getWrongFormatError();
+    }
+
+    @Test
+    @DisplayName("Ввести данные с использованием специальных символов в поле “Владелец”")
+    void declinePurchaseWithDiacriticsInOwner() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getFirstCardNumber();
+        var month = DataHelper.getValidMonth();
+        var year = DataHelper.getValidYear();
+        var cardholder = DataHelper.getDiacriticsInField();
+        var code = DataHelper.getValidCode();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getWrongFormatError();
+    }
+
+    @Test
+    @DisplayName("Ввести несколько пробелов в поле “Владелец”")
+    void declinePurchaseWithSpacesInOwner() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getFirstCardNumber();
+        var month = DataHelper.getValidMonth();
+        var year = DataHelper.getValidYear();
+        var cardholder = DataHelper.getSpacesInField();
+        var code = DataHelper.getValidCode();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getEmptyFieldError();
+    }
+
+    @Test
+    @DisplayName("Ввести два символа в поле “CVC/CVV”")
+    void declinePurchaseWithTwoSymbolsInCode() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getFirstCardNumber();
+        var month = DataHelper.getValidMonth();
+        var year = DataHelper.getValidYear();
+        var cardholder = DataHelper.getValidOwner();
+        var code = DataHelper.getCodeWithTwoNumbers();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getWrongFormatError();
+    }
+
+    @Test
+    @DisplayName("Отправка формы с пустым полем “CVC/CVV”")
+    void declinePurchaseWithEmptyCode() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getFirstCardNumber();
+        var month = DataHelper.getValidMonth();
+        var year = DataHelper.getValidYear();
+        var cardholder = DataHelper.getValidOwner();
+        var code = DataHelper.getEmptyField();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getEmptyFieldError();
+    }
+
+    @Test
+    @DisplayName("Ввести кириллицу в поле “CVC/CVV”")
+    void declinePurchaseWithCyrillicLettersInCode() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getFirstCardNumber();
+        var month = DataHelper.getValidMonth();
+        var year = DataHelper.getValidYear();
+        var cardholder = DataHelper.getValidOwner();
+        var code = DataHelper.getRusTextInCode();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getWrongFormatError();
+    }
+
+    @Test
+    @DisplayName("Ввести латиницу в поле “CVC/CVV”")
+    void declinePurchaseWithEnglishLettersInCode() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getFirstCardNumber();
+        var month = DataHelper.getValidMonth();
+        var year = DataHelper.getValidYear();
+        var cardholder = DataHelper.getValidOwner();
+        var code = DataHelper.getEngTextInCode();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getWrongFormatError();
+    }
+
+    @Test
+    @DisplayName("Ввести спец. символы в поле “CVC/CVV”")
+    void declinePurchaseWithDiacriticsInCode() {
+        cardPayment = dashboard.chooseCardPayment();
+        cardPayment.clearForm();
+        var card = DataHelper.getFirstCardNumber();
+        var month = DataHelper.getValidMonth();
+        var year = DataHelper.getValidYear();
+        var cardholder = DataHelper.getValidOwner();
+        var code = DataHelper.getDiacriticsInField();
+        cardPayment.enterDataAndContinue(card, month, year, cardholder, code);
+        cardPayment.getWrongFormatError();
+    }
 }
 
 
 
 
 
-// ВКЛЮЧИТЬ ПРОВЕРКУ ПОД КАКИМ ПОЛЕМ ПОЯВЛЯЕТСЯ СООБЩЕНИЕ:
-// попробовать конструкцию по типу monthField.$(".input__sub").ссылка на метод
 
 // БАГИ:
  // 1. неверное название страницы (заявка на карту)
- // 2. если неправильно заполнить поля, нажать продолжить, потом заполнить верно и снова нажать продолжить, сообщения под полями об ошибках все равно останутся
+ // 2. если неправильно заполнить поля, нажать продолжить, потом заполнить верно, сообщения под полями об ошибках все равно останутся, пока заявка не будет отправлена на проверку
  // 3. не пропускает карту с указанием максимального года
  // 4. принимает карту в статусе DECLINED - должен отклонять
- //
- //
- //
- //
-
-
-// $(byText("Купить")).click(); - выбрать вариант купить по карте
-// $(byText("Купить в кредит")).click(); - выбрать вариант взять в кредит
-// $("[class='heading heading_size_m heading_theme_alfa-on-white']")
-//                   + shouldHave(exactText("Оплата по карте")) - поиск заголовка раздела оплаты
-//                   + shouldHave(exactText("Кредит по данным карты")) - поиск заголовка раздела кредита
-// $('[placeholder="0000 0000 0000 0000"]') - поле номер карты
-// $('[placeholder="08"]') - поле месяц
-// $('[placeholder="22"]') - поле год
-// $$('[class="input input_type_text input_view_default input_size_m input_width_available input_has-label input_theme_alfa-on-white"]').shouldHave(exactText("Вледелец"))
-// ИЛИ
-// $$('[class="input input_type_text input_view_default input_size_m input_width_available input_has-label input_theme_alfa-on-white"]').get(3)
-// ИЛИ
-// $$("[class='input__box']").get(3)
-// ИЛИ
-// $$("[class='input__control']").get(3) - поле ВЛАДЕЛЕЦ
-// $('[placeholder="999"]') - поле CVV код
-// $(byText("Продолжить")).click(); - отправить заявку
-// $("[class='notification notification_status_ok notification_has-closer notification_stick-to_right notification_theme_alfa-on-white'] .notification__title")
-//       + .shouldHave(text("Успешно")  -  успешная покупка (карта/кредит)
-// $('[class="notification notification_status_error notification_has-closer notification_stick-to_right notification_theme_alfa-on-white"] .notification__title')
-//       + .shouldHave(text("Ошибка") - отказ в проведении операции
-// $(byText("Неверный формат"))
-// $(byText("Поле обязательно для заполнения"))
-// $(byText("Неверно указан срок действия карты")) - ошибка для поля МЕСЯЦ (когда вводишь номер больше 12 или 00)
-// $(byText("Истёк срок действия карты")) - ошибка для поля ГОД
-// $(byText("Цифры и специальные символы недопустимы")) ошибка для поля ВЛАДЕЛЕЦ
-//
+ // 5. пропускает с нулевым месяцем
+ // 6. при предыдущем месяце и текущем годе выдает ошибку Неверно указан срок действия карты вместо ошибки Истёк срок действия карты
+ // 7. принимает спец символы в поле владелец
+ // 8. принимает числа в поле владелец
+// 9. принимает кириллицу в поле владелец
+// 10. при пустом поле Год ошибка Неверный формат вместо ошибки Поле должно быть заполнено
+// 11. при пустом поле Месяц ошибка Неверный формат вместо ошибки Поле должно быть заполнено
+// 12. при пустом поле Номер Карты ошибка Неверный формат вместо ошибки Поле должно быть заполнено
