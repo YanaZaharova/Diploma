@@ -6,7 +6,6 @@ import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 
 public class SQLHelper {
 
@@ -15,7 +14,8 @@ public class SQLHelper {
     private SQLHelper() {
     }
 
-    private static Connection getConnection() throws SQLException {
+    @SneakyThrows
+    private static Connection getConnection() {
         return DriverManager.getConnection(System.getProperty("db.url"), "app", "pass");
     }
 
