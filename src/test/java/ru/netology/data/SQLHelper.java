@@ -10,14 +10,13 @@ import java.sql.DriverManager;
 public class SQLHelper {
 
     private static final QueryRunner runner = new QueryRunner();
-    private static final String url = System.getProperty("db.url");
 
     private SQLHelper() {
     }
 
     @SneakyThrows
     private static Connection getConnection() {
-        return DriverManager.getConnection(url, "app", "pass");
+        return DriverManager.getConnection(System.getProperty("db.url"), "app", "pass");
     }
 
     @SneakyThrows
