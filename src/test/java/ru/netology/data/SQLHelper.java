@@ -16,7 +16,7 @@ public class SQLHelper {
 
     @SneakyThrows
     private static Connection getConnection() {
-        return DriverManager.getConnection(System.getProperty("db.url"), "app", "pass");
+        return DriverManager.getConnection(System.getProperty("db.url"), System.getProperty("db.user"), System.getProperty("db.password"));
     }
 
     @SneakyThrows
