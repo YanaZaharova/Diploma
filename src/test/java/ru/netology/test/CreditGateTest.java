@@ -241,7 +241,7 @@ public class CreditGateTest {
         var cardholder = DataHelper.getValidOwner();
         var code = DataHelper.getValidCode();
         creditPayment.enterDataAndContinue(card, month, year, cardholder, code);
-        creditPayment.getWrongFormatError();
+        creditPayment.getWrongMonthError();
     }
 
     @Test
